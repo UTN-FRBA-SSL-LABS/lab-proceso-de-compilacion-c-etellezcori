@@ -346,7 +346,7 @@ Todos son correctos. Lo importante no es el número exacto sino que sea **varios
 **P1.** Ejecutá `wc -l programa.i` y escribí el número de líneas que obtenés.
 
 <!-- Completá la línea siguiente con el número exacto (solo dígitos, sin espacios): -->
-LINEAS_I=
+LINEAS_I=821
 
 ¿Por qué ese número es tan mayor que las 94 líneas de `programa.c`?
 
@@ -428,7 +428,7 @@ Nótese que `CUADRADO(5)` se expande a `((5) * (5))`, con los paréntesis extra 
 por otra cosa? Respondé SI o NO:
 
 <!-- Completá con SI o NO: -->
-CUADRADO_EN_I= Si
+CUADRADO_EN_I=Si
 
 ---
 
@@ -482,7 +482,7 @@ gcc -E -DDEBUG programa.c | grep "Iniciando"
 Respondé SI o NO:
 
 <!-- Completá con SI o NO: -->
-DEBUG_ACTIVA_CODIGO= SI
+DEBUG_ACTIVA_CODIGO=SI
 
 ---
 
@@ -668,7 +668,7 @@ Aparecen como instrucciones de llamada (por ejemplo `bl _area_circulo`), pero **
 Respondé DEFINIDA o LLAMADA:
 
 <!-- Completá con DEFINIDA o LLAMADA: -->
-AREA_EN_S= LLAMADA
+AREA_EN_S=LLAMADA
 
 ---
 
@@ -703,7 +703,7 @@ grep "llamadas" programa.s
 Respondé SI o NO:
 
 <!-- Completá con SI o NO: -->
-LLAMADAS_EN_S= NO
+LLAMADAS_EN_S=NO
 
 ---
 
@@ -813,7 +813,7 @@ Salida esperada (simplificada):
 Escribí solo la letra (una mayúscula):
 
 <!-- Completá con la letra exacta que muestra nm (U, T, D, etc.): -->
-TIPO_AREA_EN_O= U
+TIPO_AREA_EN_O=U
 
 ---
 
@@ -864,7 +864,7 @@ Un `.o` no es ejecutable por dos razones:
 Respondé SI o NO:
 
 <!-- Completá con SI o NO: -->
-EJECUTABLE_O= NO
+EJECUTABLE_O=NO
 
 ---
 
@@ -959,7 +959,7 @@ Ejecutá `nm programa | grep "area_circulo"` y copiá la salida.
 Escribí solo la letra:
 
 <!-- Completá con la letra exacta que muestra nm: -->
-TIPO_AREA_ENLAZADO= T
+TIPO_AREA_ENLAZADO=T
 
 ---
 
@@ -982,7 +982,7 @@ Quedan algunos `U` incluso en el ejecutable final. ¿Por qué? Son funciones de 
 Respondé SI o NO:
 
 <!-- Completá con SI o NO: -->
-SIMBOLOS_U_FINAL= SI
+SIMBOLOS_U_FINAL=SI
 
 ¿Por qué quedan? ¿Quién los resuelve y cuándo?
 
@@ -1005,7 +1005,7 @@ SIMBOLOS_U_FINAL= SI
 ¿Qué valor da `factorial(5)`? Escribí solo el número:
 
 <!-- Completá con el número exacto: -->
-FACTORIAL_5= 120
+FACTORIAL_5=120
 
 ---
 

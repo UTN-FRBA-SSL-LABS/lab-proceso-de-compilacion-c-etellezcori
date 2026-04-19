@@ -60,7 +60,7 @@ int main(void) {
     LOG("Iniciando main");   /* sólo visible si se compiló con -DDEBUG */
 
     /* Uso de función propia (misma unidad de traducción) */
-    resultado = sumar(3, 4);
+    resultado = sumar(3, 4); 
     printf("sumar(3, 4)       = %d\n", resultado);
 
     /* Uso de macro función: CUADRADO se expande en tiempo de preprocesado */

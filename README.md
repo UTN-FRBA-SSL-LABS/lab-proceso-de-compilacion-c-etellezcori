@@ -350,7 +350,7 @@ LINEAS_I=
 
 ¿Por qué ese número es tan mayor que las 94 líneas de `programa.c`?
 
-> **R:**
+> **R:** Porque durante el preprocesamiento se expanden las directivas #include, lo que implica que se copia el contenido completo de las librerías incluidas (como stdio.h) dentro del archivo. Ademas se expanden las macros y se eliminan los comentarios. Como resultado el archivo .i contiene no solo el codigo original, sino que tambien cientos de lineas adicionales provenientes de las librerías del sistema
 
 ---
 
@@ -393,7 +393,7 @@ COMENTARIOS_EN_I=
 
 ¿Por qué ocurre eso?
 
-> **R:**
+> **R:** No devuelve nada porque ese texto formaba parte de un comentario en el archivo original y durante el preprocesamiento los comentarios son eliminados.
 
 ---
 
@@ -422,24 +422,24 @@ Nótese que `CUADRADO(5)` se expande a `((5) * (5))`, con los paréntesis extra 
 
 **P3.** Ejecutá `grep -n "CUADRADO" programa.i` y copiá la salida completa.
 
-> **R:**
+> **R:** 790:    printf("CUADRADO(%d)      = %d\n", 5, ((5) * (5)));
 
 ¿El nombre `CUADRADO` aparece tal cual en `programa.i`, o fue reemplazado
 por otra cosa? Respondé SI o NO:
 
 <!-- Completá con SI o NO: -->
-CUADRADO_EN_I=
+CUADRADO_EN_I= Si
 
 ---
 
 **P4.** Ejecutá `grep -n '"1\.0"' programa.i` y copiá la línea encontrada.
 
-> **R:**
+> **R:** 781:    printf("=== Laboratorio de Compilacion en C (v%s) ===\n\n", "1.0");
 
 ¿Cuál era el nombre de la macro en `programa.c` que fue reemplazada por `"1.0"`?
 
 <!-- Completá con el nombre exacto de la macro (en mayúsculas, como está en el fuente): -->
-NOMBRE_MACRO_VERSION=
+NOMBRE_MACRO_VERSION=  VERSION
 
 ---
 
@@ -475,13 +475,14 @@ gcc -E programa.c | grep "Iniciando"
 gcc -E -DDEBUG programa.c | grep "Iniciando"
 ```
 
-> **R:**
+> **R:** gcc -E programa.c | grep "Iniciando" No devuelve nada // gcc -E -DDEBUG programa.c | grep "Iniciando": printf("[DEBUG] %s\n", ("Iniciando main"));
+
 
 ¿Agregar `-DDEBUG` hace que aparezca código nuevo en el `.i` que antes no estaba?
 Respondé SI o NO:
 
 <!-- Completá con SI o NO: -->
-DEBUG_ACTIVA_CODIGO=
+DEBUG_ACTIVA_CODIGO= SI
 
 ---
 
@@ -504,7 +505,7 @@ grep -n "stdio.h" programa.i | head -5
 
 ¿Qué información comunican esas líneas `# N "archivo"`? ¿De qué archivo proviene el bloque que contiene la declaración de `printf`?
 
-> **R:**
+> **R:** Las líneas # N "archivo" indican el número de línea y el archivo de origen del código que aparece a continuación en el archivo preprocesado. En este caso, muestran que ese bloque de código proviene del archivo stdio.h, que es donde se encuentra la declaración de printf
 
 ---
 
@@ -660,26 +661,29 @@ Aparecen como instrucciones de llamada (por ejemplo `bl _area_circulo`), pero **
 
 **P7.** Ejecutá `grep "area_circulo" programa.s` y copiá la salida.
 
-> **R:**
+> **R:**         call    _area_circulo // .def    _area_circulo;  .scl    2;      .type   32;     .endef
 
 ¿`area_circulo` aparece como una función *definida* en `programa.s`
 (con su propio bloque de instrucciones) o solo como una *llamada* (instrucción sin cuerpo)?
 Respondé DEFINIDA o LLAMADA:
 
 <!-- Completá con DEFINIDA o LLAMADA: -->
-AREA_EN_S=
+AREA_EN_S= LLAMADA
 
 ---
 
 **P8.** Encontrá en `programa.s` la etiqueta `sumar:` o `_sumar:` y copiá
 las primeras 4 líneas de instrucciones que le siguen.
 
-> **R:**
+> **R:** 	.cfi_startproc
+	pushl	%ebp
+	.cfi_def_cfa_offset 8
+	.cfi_offset 5, -8
 
 Explicá en términos generales qué hacen esas instrucciones
 (usá los comentarios del laboratorio como guía):
 
-> **R:**
+> **R:**  Estas instrucciones preparan el entorno de ejecución de la función. En particular, guardan el estado anterior de la pila y configuran el nuevo marco de pila que se utilizará para manejar variables locales y parámetros durante la ejecución de la función
 
 ---
 
@@ -692,13 +696,14 @@ grep "llamadas" programa.s
 
 **P9.** Ejecutá `grep "llamadas" programa.s` y copiá la salida.
 
-> **R:**
+> **R:**         movl    %eax, _llamadas
+       //  movl    _llamadas, %eax
 
 ¿Aparece la variable `llamadas` en el ensamblador?
 Respondé SI o NO:
 
 <!-- Completá con SI o NO: -->
-LLAMADAS_EN_S=
+LLAMADAS_EN_S= NO
 
 ---
 
@@ -802,13 +807,13 @@ Salida esperada (simplificada):
 
 **P10.** Ejecutá `nm programa.o` y copiá la salida completa.
 
-> **R:**
+> **R:**          U _puts // 00000000 T _sumar
 
 ¿Con qué letra aparece `area_circulo` en esa tabla?
 Escribí solo la letra (una mayúscula):
 
 <!-- Completá con la letra exacta que muestra nm (U, T, D, etc.): -->
-TIPO_AREA_EN_O=
+TIPO_AREA_EN_O= U
 
 ---
 
@@ -828,13 +833,13 @@ nm matematica.o
 **P11.** ¿Por qué `area_circulo` tiene ese tipo en `programa.o`
 pero tipo `T` en `matematica.o`?
 
-> **R:**
+> **R:** Porque en programa.o la función area_circulo solo es utilizada pero no está definida, por lo que aparece como símbolo indefinido (U). En cambio, en matematica.o la función está definida, por lo que aparece como símbolo de tipo T
 
 ¿Qué etapa del proceso de compilación resuelve esa diferencia?
 Respondé con una palabra: PREPROCESAMIENTO, COMPILACION, ENSAMBLADO o ENLAZADO:
 
 <!-- Completá con una de las cuatro opciones: -->
-ETAPA_QUE_RESUELVE=
+ETAPA_QUE_RESUELVE= ENLAZADO
 
 ---
 
@@ -853,13 +858,13 @@ Un `.o` no es ejecutable por dos razones:
 
 **P12.** Intentá ejecutar `./programa.o` directamente. ¿Qué mensaje aparece?
 
-> **R:**
+> **R:** bash: ./programa.o: cannot execute binary file: Exec format error
 
 ¿Se puede ejecutar un archivo `.o` directamente?
 Respondé SI o NO:
 
 <!-- Completá con SI o NO: -->
-EJECUTABLE_O=
+EJECUTABLE_O= NO
 
 ---
 
@@ -948,13 +953,13 @@ nm programa | grep area_circulo
 **P13.** Enlazá con `gcc programa.o matematica.o -o programa`.
 Ejecutá `nm programa | grep "area_circulo"` y copiá la salida.
 
-> **R:**
+> **R:** 004015a8 T _area_circulo
 
 ¿Con qué letra aparece ahora `area_circulo` en el ejecutable final?
 Escribí solo la letra:
 
 <!-- Completá con la letra exacta que muestra nm: -->
-TIPO_AREA_ENLAZADO=
+TIPO_AREA_ENLAZADO= T
 
 ---
 
@@ -970,17 +975,18 @@ Quedan algunos `U` incluso en el ejecutable final. ¿Por qué? Son funciones de 
 
 **P14.** Ejecutá `nm programa | grep "^ *U"` y copiá la salida.
 
-> **R:**
+> **R:**          U ___register_frame_info
+        && U __Jv_RegisterClasses
 
 ¿Quedan símbolos de tipo `U` en el ejecutable final?
 Respondé SI o NO:
 
 <!-- Completá con SI o NO: -->
-SIMBOLOS_U_FINAL=
+SIMBOLOS_U_FINAL= SI
 
 ¿Por qué quedan? ¿Quién los resuelve y cuándo?
 
-> **R:**
+> **R:** Quedan simbolos de tipo U porque corresponden a funciones o referencias externas de bibliotecas del sistema que no se resuelven completamente durante el enlazado. Estos símbolos son resueltos posteriormente por el sistema operativo, a través del loader dinámico, en tiempo de ejecución.
 
 ---
 
@@ -994,12 +1000,12 @@ SIMBOLOS_U_FINAL=
 
 **P15.** Ejecutá `./programa` y copiá la salida completa.
 
-> **R:**
+> **R:** Llamadas a sumar(): 1
 
 ¿Qué valor da `factorial(5)`? Escribí solo el número:
 
 <!-- Completá con el número exacto: -->
-FACTORIAL_5=
+FACTORIAL_5= 120
 
 ---
 
@@ -1011,25 +1017,26 @@ FACTORIAL_5=
 como `CUADRADO(x)` y una **función real** como `sumar(a, b)`.
 ¿En qué etapa "desaparece" cada una? ¿Cuál tiene verificación de tipos?
 
-> **R:**
+> **R:** Una macro función como CUADRADO(x) es una sustitución textual que realiza el preprocesador antes de la compilación, por lo que no es una función real y no tiene verificación de tipos. En cambio, una función como sumar(a, b) es compilada como código ejecutable, tiene verificación de tipos y existe en tiempo de ejecución. La macro “desaparece” en la etapa de preprocesamiento, mientras que la función se mantiene hasta el ejecutable final.
 
 ---
 
 **P17.** ¿Qué diferencia hay entre un símbolo de tipo `T` y uno de tipo `D`
 en la salida de `nm`? ¿En qué sección del archivo objeto vive cada uno?
 
-> **R:**
+> **R:** Un símbolo de tipo T representa código ejecutable (funciones) y se encuentra en la sección de texto del archivo objeto. En cambio, un símbolo de tipo D representa datos globales o variables inicializadas, y se encuentra en la sección de datos
 
 ---
 
 **P18.** (Bonus) Ejecutá `otool -L programa` (macOS) o `ldd programa` (Linux)
 y copiá la salida.
 
-> **R:**
+> **R:**         wow64win.dll => /c/WINDOWS/System32/wow64win.dll (0x7ffc9d570000)
+       &&  wow64con.dll => /c/WINDOWS/System32/wow64con.dll (0x7ffc9db60000)
 
 ¿Por qué `libc` no hubo que especificarla explícitamente al enlazar con `gcc`?
 
-> **R:**
+> **R:** Porque el compilador gcc enlaza automáticamente la biblioteca estándar de C (libc) por defecto, por lo que no es necesario especificarla manualmente durante el enlazado.
 
 ---
 
